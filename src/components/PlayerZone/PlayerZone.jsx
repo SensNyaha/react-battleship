@@ -20,7 +20,7 @@ const PlayerZone = ({ host }) => {
                     Без вести потеряно кораблей: {"2"}
                 </div>
             </div>
-            <PlayerZoneField currentDirection="vertical" numberOfDeck={4} />
+            <PlayerZoneField numberOfDeck={4} />
             <PlayerZoneShipShop />
         </div>
     );

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./PlayerZoneField.scss";
 
 const marksObject = {
@@ -25,35 +25,60 @@ const marksObject = {
     "111-11": "10",
 };
 
-const PlayerZoneField = ({ currentDirection, numberOfDeck }) => {
+const PlayerZoneField = ({ numberOfDeck }) => {
     const [highlightedBlocks, setHighlightedBlocks] = useState([]);
+    const [hoveredBlockID, setHoveredBlockId] = useState();
+    const [currentDirection, setCurrentDirection] = useState("horizontal");
 
-    const handleHoverFieldBlock = (id) => {
-        const splitted = id.split("-");
-        if (currentDirection === "horizontal") {
-            if (splitted[0] <= 10 - numberOfDeck) {
-                const positions = [...new Array(+numberOfDeck)].map(
-                    (item, index) => {
-                        return `${+splitted[0] + index}-${splitted[1]}`;
-                    }
-                );
-                setHighlightedBlocks(positions);
-                return null;
+    useEffect(() => {
+        if (hoveredBlockID) {
+            const splitted = hoveredBlockID.split("-");
+            if (currentDirection === "horizontal") {
+                if (splitted[0] <= 10 - numberOfDeck) {
+                    const positions = [...new Array(+numberOfDeck)].map(
+                        (item, index) => {
+                            return `${+splitted[0] + index}-${splitted[1]}`;
+                        }
+                    );
+                    setHighlightedBlocks(positions);
+                } else {
+                    const positions = [...new Array(+numberOfDeck)].map(
+                        (item, index) => {
+                            return `${10 - index}-${splitted[1]}`;
+                        }
+                    );
+                    setHighlightedBlocks(positions);
+                }
+            } else if (currentDirection === "vertical") {
+                if (splitted[1] <= 10 - numberOfDeck) {
+                    const positions = [...new Array(+numberOfDeck)].map(
+                        (item, index) => {
+                            return `${splitted[0]}-${+splitted[1] + index}`;
+                        }
+                    );
+                    setHighlightedBlocks(positions);
+                } else {
+                    const positions = [...new Array(+numberOfDeck)].map(
+                        (item, index) => {
+                            return `${splitted[0]}-${10 - index}`;
+                        }
+                    );
+                    setHighlightedBlocks(positions);
+                }
             }
-            setHighlightedBlocks([]);
-            return null;
-        } else if (currentDirection === "vertical") {
-            if (splitted[1] <= 10 - numberOfDeck) {
-                const positions = [...new Array(+numberOfDeck)].map(
-                    (item, index) => {
-                        return `${splitted[0]}-${+splitted[1] + index}`;
-                    }
-                );
-                setHighlightedBlocks(positions);
-                return null;
-            }
-            setHighlightedBlocks([]);
-            return null;
+        }
+    }, [hoveredBlockID, currentDirection]);
+
+    const handleRightClick = (e) => {
+        if (numberOfDeck) {
+            e.preventDefault();
+
+            setCurrentDirection((prev) => {
+                if (prev === "horizontal") {
+                    return "vertical";
+                }
+                return "horizontal";
+            });
         }
     };
 
@@ -61,7 +86,7 @@ const PlayerZoneField = ({ currentDirection, numberOfDeck }) => {
         const content =
             marksObject[`${index + 1}-${Math.floor(index / 11) + 1}`];
 
-        const id = `${(index % 11) - 1}-${Math.floor((index - 11) / 11) + 1}`;
+        const id = `${index % 11}-${Math.floor((index - 11) / 11) + 1}`;
 
         return (
             <div
@@ -78,13 +103,24 @@ const PlayerZoneField = ({ currentDirection, numberOfDeck }) => {
                     background: highlightedBlocks.includes(id) ? "black" : "",
                 }}
                 id={id}
-                onClick={() => handleHoverFieldBlock(id)}
+                onPointerEnter={() => setHoveredBlockId(id)}
+                onPointerLeave={() => {
+                    setHighlightedBlocks([]);
+                }}
             >
                 {content}
             </div>
         );
     });
-    return <div className="player-zone__field">{fieldBlocks}</div>;
+    return (
+        <div
+            className="player-zone__field"
+            data-direction={currentDirection}
+            onContextMenu={handleRightClick}
+        >
+            {fieldBlocks}
+        </div>
+    );
 };
 
 export default PlayerZoneField;
