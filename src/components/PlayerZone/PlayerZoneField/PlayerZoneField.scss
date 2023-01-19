@@ -15,9 +15,7 @@
 
     border: 1px solid rgba(1, 5, 133, 0.458);
 
-    &:not(.player-zone__block--blocked) {
-        &:hover {
-            background-color: #000;
-        }
+    &.player-zone__block--blocked {
+        pointer-events: none;
     }
 }

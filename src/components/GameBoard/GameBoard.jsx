@@ -5,7 +5,7 @@ import "./GameBoard.scss";
 const GameBoard = () => {
     return (
         <div className="game__board">
-            <PlayerZone />
+            <PlayerZone host />
             <PlayerZone />
         </div>
     );

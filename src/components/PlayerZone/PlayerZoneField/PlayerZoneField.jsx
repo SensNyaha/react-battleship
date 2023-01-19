@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./PlayerZoneField.scss";
 
 const marksObject = {
@@ -24,23 +25,60 @@ const marksObject = {
     "111-11": "10",
 };
 
-const PlayerZoneField = () => {
+const PlayerZoneField = ({ currentDirection, numberOfDeck }) => {
+    const [highlightedBlocks, setHighlightedBlocks] = useState([]);
+
+    const handleHoverFieldBlock = (id) => {
+        const splitted = id.split("-");
+        if (currentDirection === "horizontal") {
+            if (splitted[0] <= 10 - numberOfDeck) {
+                const positions = [...new Array(+numberOfDeck)].map(
+                    (item, index) => {
+                        return `${+splitted[0] + index}-${splitted[1]}`;
+                    }
+                );
+                setHighlightedBlocks(positions);
+                return null;
+            }
+            setHighlightedBlocks([]);
+            return null;
+        } else if (currentDirection === "vertical") {
+            if (splitted[1] <= 10 - numberOfDeck) {
+                const positions = [...new Array(+numberOfDeck)].map(
+                    (item, index) => {
+                        return `${splitted[0]}-${+splitted[1] + index}`;
+                    }
+                );
+                setHighlightedBlocks(positions);
+                return null;
+            }
+            setHighlightedBlocks([]);
+            return null;
+        }
+    };
+
     const fieldBlocks = [...Array(121)].map((item, index) => {
         const content =
             marksObject[`${index + 1}-${Math.floor(index / 11) + 1}`];
+
+        const id = `${(index % 11) - 1}-${Math.floor((index - 11) / 11) + 1}`;
+
         return (
             <div
                 className={`player-zone__block ${
                     content ? "player-zone__block--blocked" : ""
                 }`}
-                key={`${index + 1}-${Math.floor(index / 11) + 1}`}
+                key={id}
                 style={{
                     borderTop: Math.floor(index / 11) + 1 === 1 ? "none" : "",
                     borderBottom:
                         Math.floor(index / 11) + 1 === 11 ? "none" : "",
                     borderLeft: index % 11 === 0 ? "none" : "",
                     borderRight: (index + 1) % 11 === 0 ? "none" : "",
+                    background: highlightedBlocks.includes(id) ? "black" : "",
                 }}
+                id={id}
+                onClick={() => handleHoverFieldBlock(id)}
             >
                 {content}
             </div>
