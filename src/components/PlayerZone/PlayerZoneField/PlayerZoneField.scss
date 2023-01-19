@@ -1,0 +1,17 @@
+.player-zone__field {
+    margin-top: 20px;
+
+    // border: 1px solid rgba(1, 5, 133, 0.458);
+
+    display: grid;
+    grid-template-columns: repeat(11, calc(40vw / 11));
+    grid-template-rows: repeat(11, calc(40vw / 11));
+}
+
+.player-zone__block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid rgba(1, 5, 133, 0.458);
+}
