@@ -31,7 +31,7 @@ const PlayerZoneField = ({ numberOfDeck }) => {
     const [currentDirection, setCurrentDirection] = useState("horizontal");
 
     useEffect(() => {
-        if (hoveredBlockID) {
+        if (hoveredBlockID && numberOfDeck) {
             const splitted = hoveredBlockID.split("-");
             if (currentDirection === "horizontal") {
                 if (splitted[0] <= 10 - numberOfDeck) {
