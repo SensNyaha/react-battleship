@@ -1,9 +1,9 @@
 import "./PlayerZoneShipShop.scss";
 
-import deck1 from "./1deck.png";
-import deck2 from "./2deck.png";
-import deck3 from "./3deck.png";
-import deck4 from "./4deck.png";
+import deck1 from "../1deck.png";
+import deck2 from "../2deck.png";
+import deck3 from "../3deck.png";
+import deck4 from "../4deck.png";
 
 const PlayerZoneShipShop = () => {
     return (

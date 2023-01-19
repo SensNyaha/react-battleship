@@ -4,6 +4,17 @@ import PlayerZoneField from "./PlayerZoneField/PlayerZoneField";
 import PlayerZoneShipShop from "./PlayerZoneShipShop/PlayerZoneShipShop";
 
 const PlayerZone = ({ host }) => {
+    const [currentNumberOfDeck, setCurrentNumberOfDeck] = useState(2);
+    const [positionedShips, setPositionedShips] = useState([]);
+
+    const onPlacingTheShip = (highlightedBlocks) => {
+        setPositionedShips((prev) => [
+            ...prev,
+            { numberOfDeck: currentNumberOfDeck, positions: highlightedBlocks },
+        ]);
+        setCurrentNumberOfDeck(null);
+    };
+
     return (
         <div
             className={`player-zone ${host ? "player-zone--player" : ""}`}
@@ -20,7 +31,11 @@ const PlayerZone = ({ host }) => {
                     Без вести потеряно кораблей: {"2"}
                 </div>
             </div>
-            <PlayerZoneField />
+            <PlayerZoneField
+                numberOfDeck={currentNumberOfDeck}
+                onPlacingTheShip={onPlacingTheShip}
+                shipsPositions={positionedShips}
+            />
             <PlayerZoneShipShop />
         </div>
     );

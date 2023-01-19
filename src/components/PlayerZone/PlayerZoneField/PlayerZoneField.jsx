@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import "./PlayerZoneField.scss";
 
+import deck1 from "../1deck.png";
+import deck2 from "../2deck.png";
+import deck3 from "../3deck.png";
+import deck4 from "../4deck.png";
+import sortFieldIndexes from "../../../helpers/sortFieldIndexes";
+
 const marksObject = {
     "1-1": " ",
     "2-1": "A",
@@ -25,7 +31,11 @@ const marksObject = {
     "111-11": "10",
 };
 
-const PlayerZoneField = ({ numberOfDeck }) => {
+const PlayerZoneField = ({
+    numberOfDeck,
+    onPlacingTheShip,
+    shipsPositions,
+}) => {
     const [highlightedBlocks, setHighlightedBlocks] = useState([]);
     const [hoveredBlockID, setHoveredBlockId] = useState();
     const [currentDirection, setCurrentDirection] = useState("horizontal");
@@ -81,17 +91,93 @@ const PlayerZoneField = ({ numberOfDeck }) => {
             });
         }
     };
+    const handlePlacingTheShip = () => {
+        onPlacingTheShip(highlightedBlocks);
+        setHighlightedBlocks([]);
+    };
 
     const fieldBlocks = [...Array(121)].map((item, index) => {
-        const content =
-            marksObject[`${index + 1}-${Math.floor(index / 11) + 1}`];
+        let content = marksObject[`${index + 1}-${Math.floor(index / 11) + 1}`];
 
         const id = `${index % 11}-${Math.floor((index - 11) / 11) + 1}`;
+
+        const shipPositionInfo = shipsPositions.find((pos) =>
+            pos.positions.includes(id)
+        );
+
+        if (shipPositionInfo?.positions.sort(sortFieldIndexes)[0] === id) {
+            switch (shipPositionInfo?.numberOfDeck) {
+                case 4:
+                    content = (
+                        <img
+                            class="ship__decks-4"
+                            src={deck4}
+                            alt=""
+                            style={{
+                                transform:
+                                    currentDirection === "vertical"
+                                        ? "rotateZ(-90deg)"
+                                        : "",
+                            }}
+                        />
+                    );
+                    break;
+                case 3:
+                    content = (
+                        <img
+                            class="ship__decks-3"
+                            src={deck3}
+                            alt=""
+                            style={{
+                                transform:
+                                    currentDirection === "vertical"
+                                        ? "rotateZ(-90deg)"
+                                        : "",
+                            }}
+                        />
+                    );
+                    break;
+                case 2:
+                    content = (
+                        <img
+                            class="ship__decks-2"
+                            src={deck2}
+                            alt=""
+                            style={{
+                                transform:
+                                    currentDirection === "vertical"
+                                        ? "rotateZ(-90deg)"
+                                        : "",
+                            }}
+                        />
+                    );
+                    break;
+                case 1:
+                    content = (
+                        <img
+                            class="ship__decks-1"
+                            src={deck1}
+                            alt=""
+                            style={{
+                                transform:
+                                    currentDirection === "vertical"
+                                        ? "rotateZ(-90deg)"
+                                        : "",
+                            }}
+                        />
+                    );
+                    break;
+                default:
+                    break;
+            }
+        }
 
         return (
             <div
                 className={`player-zone__block ${
-                    content ? "player-zone__block--blocked" : ""
+                    typeof content === "string"
+                        ? "player-zone__block--blocked"
+                        : ""
                 }`}
                 key={id}
                 style={{
@@ -106,18 +192,16 @@ const PlayerZoneField = ({ numberOfDeck }) => {
                 onPointerEnter={() => setHoveredBlockId(id)}
                 onPointerLeave={() => {
                     setHighlightedBlocks([]);
+                    setHoveredBlockId("");
                 }}
+                onClick={handlePlacingTheShip}
             >
                 {content}
             </div>
         );
     });
     return (
-        <div
-            className="player-zone__field"
-            data-direction={currentDirection}
-            onContextMenu={handleRightClick}
-        >
+        <div className="player-zone__field" onContextMenu={handleRightClick}>
             {fieldBlocks}
         </div>
     );

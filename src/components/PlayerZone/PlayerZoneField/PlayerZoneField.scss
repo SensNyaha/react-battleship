@@ -9,13 +9,32 @@
 }
 
 .player-zone__block {
-    display: flex;
-    justify-content: center;
-    align-items: center;
 
     border: 1px solid rgba(1, 5, 133, 0.458);
 
+    img {
+        position: relative;
+    }
+
     &.player-zone__block--blocked {
         pointer-events: none;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+.ship__decks {
+    &-1 {
+        width: 100%;
+    }
+    &-2 {
+        width: 200%;
+    }
+    &-3 {
+        width: 300%;
+    }
+    &-4 {
+        width: 400%;
     }
 }
