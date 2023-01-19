@@ -1,5 +1,6 @@
 import "./PlayerZone.scss";
 import PlayerZoneField from "./PlayerZoneField/PlayerZoneField";
+import PlayerZoneShipShop from "./PlayerZoneShipShop/PlayerZoneShipShop";
 
 const PlayerZone = () => {
     return (
@@ -13,7 +14,7 @@ const PlayerZone = () => {
                 </div>
             </div>
             <PlayerZoneField />
-            <div className="player-zone__ship-shop">SHIP-SHOP</div>
+            <PlayerZoneShipShop />
         </div>
     );
 };
