@@ -112,6 +112,24 @@ const PlayerZoneShipShop = ({ setCurrentNumberOfDeck, positionedShips }) => {
         }
     }, [positionedShips]);
 
+    useEffect(() => {
+        if (plantedShips) {
+            setPlantedShips((prevState) => {
+                return [...prevState].map((item) => {
+                    const isNotPresentedInNewPositionedShips =
+                        !positionedShips.some((ship) => {
+                            console.log(ship.numberOfDeck, item.decks);
+                            return ship.numberOfDeck == item.decks;
+                        });
+                    if (item.positioned && isNotPresentedInNewPositionedShips) {
+                        return { ...item, positioned: false };
+                    }
+                    return item;
+                });
+            });
+        }
+    }, [positionedShips]);
+
     return (
         <div className="player-zone__ship-shop">
             {plantedShips &&

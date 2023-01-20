@@ -63,8 +63,10 @@ const PlayerZoneField = ({
         }
     };
     const handlePlacingTheShip = () => {
-        onPlacingTheShip(highlightedBlocks, currentDirection);
-        setHighlightedBlocks([]);
+        if (numberOfDeck) {
+            onPlacingTheShip(highlightedBlocks, currentDirection);
+            setHighlightedBlocks([]);
+        }
     };
 
     return (
