@@ -4,7 +4,7 @@ import PlayerZoneField from "./PlayerZoneField/PlayerZoneField";
 import PlayerZoneShipShop from "./PlayerZoneShipShop/PlayerZoneShipShop";
 
 const PlayerZone = ({ host }) => {
-    const [currentNumberOfDeck, setCurrentNumberOfDeck] = useState(2);
+    const [currentNumberOfDeck, setCurrentNumberOfDeck] = useState();
     const [positionedShips, setPositionedShips] = useState([]);
 
     const onPlacingTheShip = (highlightedBlocks) => {
@@ -36,7 +36,9 @@ const PlayerZone = ({ host }) => {
                 onPlacingTheShip={onPlacingTheShip}
                 shipsPositions={positionedShips}
             />
-            <PlayerZoneShipShop />
+            <PlayerZoneShipShop
+                setCurrentNumberOfDeck={setCurrentNumberOfDeck}
+            />
         </div>
     );
 };
