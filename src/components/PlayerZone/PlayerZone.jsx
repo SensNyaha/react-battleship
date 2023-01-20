@@ -7,10 +7,14 @@ const PlayerZone = ({ host }) => {
     const [currentNumberOfDeck, setCurrentNumberOfDeck] = useState();
     const [positionedShips, setPositionedShips] = useState([]);
 
-    const onPlacingTheShip = (highlightedBlocks) => {
+    const onPlacingTheShip = (highlightedBlocks, currentDirection) => {
         setPositionedShips((prev) => [
             ...prev,
-            { numberOfDeck: currentNumberOfDeck, positions: highlightedBlocks },
+            {
+                numberOfDeck: currentNumberOfDeck,
+                positions: highlightedBlocks,
+                orientation: currentDirection,
+            },
         ]);
         setCurrentNumberOfDeck(null);
     };
@@ -38,6 +42,7 @@ const PlayerZone = ({ host }) => {
             />
             <PlayerZoneShipShop
                 setCurrentNumberOfDeck={setCurrentNumberOfDeck}
+                positionedShips={positionedShips}
             />
         </div>
     );

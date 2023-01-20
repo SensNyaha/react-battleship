@@ -1,0 +1,37 @@
+.player-zone__block {
+
+    border: 1px solid rgba(1, 5, 133, 0.458);
+
+    display: flex;
+    align-items:center;
+
+    img {
+        position: relative;
+    }
+
+    &.player-zone__block--blocked {
+        pointer-events: none;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+.ship__decks {
+    &-1 {
+        transform-origin: left top;
+        width: 100%;
+    }
+    &-2 {
+        transform-origin: left top;
+        width: 200%;
+    }
+    &-3 {
+        transform-origin: left top;
+        width: 300%;
+    }
+    &-4 {
+        transform-origin: left top;
+        width: 400%;
+    }
+}

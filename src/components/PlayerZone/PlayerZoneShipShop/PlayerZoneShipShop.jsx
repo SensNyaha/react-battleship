@@ -4,6 +4,7 @@ import deck1 from "../1deck.png";
 import deck2 from "../2deck.png";
 import deck3 from "../3deck.png";
 import deck4 from "../4deck.png";
+import { useEffect, useState } from "react";
 
 const ships = [
     {
@@ -68,7 +69,31 @@ const ships = [
     },
 ];
 
-const PlayerZoneShipShop = ({ setCurrentNumberOfDeck }) => {
+const PlayerZoneShipShop = ({ setCurrentNumberOfDeck, positionedShips }) => {
+    const [filteredShips, setFilteredShips] = useState({});
+    useEffect(() => {
+        if (positionedShips.length) {
+            positionedShips.forEach((pos) => {
+                setFilteredShips((prev) => {
+                    if (prev[pos.numberOfDeck]) {
+                        return {
+                            ...prev,
+                            [pos.numberOfDeck]: [
+                                prev?.[pos.numberOfDeck],
+                                pos.positions,
+                            ],
+                        };
+                    } else {
+                        return {
+                            ...prev,
+                            [pos.numberOfDeck]: [pos.positions],
+                        };
+                    }
+                });
+            });
+        }
+    }, [positionedShips]);
+
     return (
         <div className="player-zone__ship-shop">
             {ships.map((ship, index) => {
