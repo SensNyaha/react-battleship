@@ -12,108 +12,122 @@ const ships = [
         alt: "4-палубник",
         altClass: "player-zone__ship--4",
         decks: 4,
+        positioned: false,
     },
     {
         img: deck3,
         alt: "3-палубник",
         altClass: "player-zone__ship--3",
         decks: 3,
+        positioned: false,
     },
     {
         img: deck3,
         alt: "3-палубник",
         altClass: "player-zone__ship--3",
         decks: 3,
+        positioned: false,
     },
     {
         img: deck2,
         alt: "2-палубник",
         altClass: "player-zone__ship--2",
         decks: 2,
+        positioned: false,
     },
     {
         img: deck2,
         alt: "2-палубник",
         altClass: "player-zone__ship--2",
         decks: 2,
+        positioned: false,
     },
     {
         img: deck2,
         alt: "2-палубник",
         altClass: "player-zone__ship--2",
         decks: 2,
+        positioned: false,
     },
     {
         img: deck1,
         alt: "1-палубник",
         altClass: "player-zone__ship--1",
         decks: 1,
+        positioned: false,
     },
     {
         img: deck1,
         alt: "1-палубник",
         altClass: "player-zone__ship--1",
         decks: 1,
+        positioned: false,
     },
     {
         img: deck1,
         alt: "1-палубник",
         altClass: "player-zone__ship--1",
         decks: 1,
+        positioned: false,
     },
     {
         img: deck1,
         alt: "1-палубник",
         altClass: "player-zone__ship--1",
         decks: 1,
+        positioned: false,
     },
 ];
 
 const PlayerZoneShipShop = ({ setCurrentNumberOfDeck, positionedShips }) => {
-    const [filteredShips, setFilteredShips] = useState({});
+    const [plantedShips, setPlantedShips] = useState(ships);
+
     useEffect(() => {
-        if (positionedShips.length) {
-            positionedShips.forEach((pos) => {
-                setFilteredShips((prev) => {
-                    if (prev[pos.numberOfDeck]) {
-                        return {
-                            ...prev,
-                            [pos.numberOfDeck]: [
-                                prev?.[pos.numberOfDeck],
-                                pos.positions,
-                            ],
+        if (plantedShips) {
+            plantedShips?.forEach((ship, index) => {
+                const shipInProp = positionedShips?.find(
+                    (item) => +item.numberOfDeck === ship.decks
+                );
+
+                if (shipInProp) {
+                    setPlantedShips((prev) => {
+                        const copy = [...prev];
+                        copy[index] = {
+                            ...prev.find((item) => +item.decks === ship.decks),
+                            positioned: true,
                         };
-                    } else {
-                        return {
-                            ...prev,
-                            [pos.numberOfDeck]: [pos.positions],
-                        };
-                    }
-                });
+                        return copy;
+                    });
+                }
             });
         }
     }, [positionedShips]);
 
     return (
         <div className="player-zone__ship-shop">
-            {ships.map((ship, index) => {
-                return (
-                    <div
-                        key={ship.alt + "-" + index}
-                        className={`player-zone__ship ${ship.altClass}`}
-                        decks={ship.decks}
-                        onClick={(e) => {
-                            setCurrentNumberOfDeck(
-                                e.target
-                                    .closest(".player-zone__ship")
-                                    .getAttribute("decks")
-                            );
-                        }}
-                    >
-                        <img src={ship.img} alt={ship.alt} />
-                    </div>
-                );
-            })}
+            {plantedShips &&
+                plantedShips.map((ship, index) => {
+                    return (
+                        <div
+                            key={ship.alt + "-" + index}
+                            className={`player-zone__ship ${ship.altClass} ${
+                                ship.positioned
+                                    ? "player-zone__ship--placed"
+                                    : ""
+                            }`}
+                            decks={ship.decks}
+                            onClick={(e) => {
+                                setCurrentNumberOfDeck(
+                                    e.target
+                                        .closest(".player-zone__ship")
+                                        .getAttribute("decks")
+                                );
+                            }}
+                        >
+                            <img src={ship.img} alt={ship.alt} />
+                        </div>
+                    );
+                })}
         </div>
     );
 };
