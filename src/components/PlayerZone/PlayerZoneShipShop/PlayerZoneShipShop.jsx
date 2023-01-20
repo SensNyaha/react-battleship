@@ -79,27 +79,36 @@ const ships = [
     },
 ];
 
+//USE MEMO для POSITIONEDSHIPS
+
 const PlayerZoneShipShop = ({ setCurrentNumberOfDeck, positionedShips }) => {
     const [plantedShips, setPlantedShips] = useState(ships);
 
     useEffect(() => {
         if (plantedShips) {
-            plantedShips?.forEach((ship, index) => {
+            for (let i = 0; i < plantedShips.length; i++) {
                 const shipInProp = positionedShips?.find(
-                    (item) => +item.numberOfDeck === ship.decks
+                    (item) =>
+                        +item.numberOfDeck === plantedShips[i].decks &&
+                        !plantedShips[i].positioned
                 );
 
                 if (shipInProp) {
                     setPlantedShips((prev) => {
                         const copy = [...prev];
-                        copy[index] = {
-                            ...prev.find((item) => +item.decks === ship.decks),
+                        copy[i] = {
+                            ...prev.find(
+                                (item) =>
+                                    +item.decks === plantedShips[i].decks &&
+                                    !item.positioned
+                            ),
                             positioned: true,
                         };
                         return copy;
                     });
+                    break;
                 }
-            });
+            }
         }
     }, [positionedShips]);
 
