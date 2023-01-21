@@ -138,7 +138,7 @@ const PlayerZoneShipShop = ({ setCurrentNumberOfDeck, positionedShips }) => {
                 return [
                     ...removed.map((item) => ({ ...item, positioned: false })),
                     ...placed.map((item) => ({ ...item, positioned: true })),
-                ];
+                ].sort((a, b) => b.decks - a.decks);
             });
         }
     }, [positionedShips]);
