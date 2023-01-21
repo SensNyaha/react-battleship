@@ -34,8 +34,7 @@ const marksObject = {
 
 const PlayerZoneFieldBlock = ({
     index,
-    shipsPositions,
-    currentDirection,
+    positionedShips,
     highlightedBlocks,
     setHoveredBlockId,
     setHighlightedBlocks,
@@ -45,7 +44,7 @@ const PlayerZoneFieldBlock = ({
 
     const id = `${index % 11}-${Math.floor((index - 11) / 11) + 1}`;
 
-    const shipPositionInfo = shipsPositions.find((pos) =>
+    const shipPositionInfo = positionedShips.find((pos) =>
         pos.positions.includes(id)
     );
     if (shipPositionInfo?.positions.sort(sortFieldIndexes)[0] === id) {

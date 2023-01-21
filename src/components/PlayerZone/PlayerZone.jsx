@@ -46,7 +46,7 @@ const PlayerZone = ({ host }) => {
             <PlayerZoneField
                 numberOfDeck={currentNumberOfDeck}
                 onPlacingTheShip={onPlacingTheShip}
-                shipsPositions={positionedShips}
+                positionedShips={positionedShips}
                 onClickingTheShip={onClickingTheShip}
             />
             <PlayerZoneShipShop

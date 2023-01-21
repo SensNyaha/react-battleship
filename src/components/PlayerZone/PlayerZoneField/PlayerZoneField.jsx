@@ -5,10 +5,11 @@ import PlayerZoneFieldBlock from "./PlayerZoneFieldBlock/PlayerZoneFieldBlock";
 const PlayerZoneField = ({
     numberOfDeck,
     onPlacingTheShip,
-    shipsPositions,
+    positionedShips,
     onClickingTheShip,
 }) => {
     const [highlightedBlocks, setHighlightedBlocks] = useState([]);
+    const [blockedCells, setBlockedCells] = useState(new Set());
     const [hoveredBlockID, setHoveredBlockId] = useState();
     const [currentDirection, setCurrentDirection] = useState("horizontal");
 
@@ -51,6 +52,93 @@ const PlayerZoneField = ({
         }
     }, [hoveredBlockID, currentDirection]);
 
+    useEffect(() => {
+        setBlockedCells(new Set());
+        //Логика определения заблокированных ячеек
+        positionedShips &&
+            positionedShips.forEach((ship) => {
+                ship.positions.forEach((position) => {
+                    const arrayOfPositions = [];
+                    const splittedPosition = position.split("-");
+                    console.log(splittedPosition);
+                    if (splittedPosition[0] > 1) {
+                        setBlockedCells((state) =>
+                            state.add(
+                                `${splittedPosition[0] - 1}-${
+                                    splittedPosition[1]
+                                }`
+                            )
+                        );
+                        if (+splittedPosition[0] > 1) {
+                            setBlockedCells((state) =>
+                                state.add(
+                                    `${splittedPosition[0] - 1}-${
+                                        splittedPosition[1] - 1
+                                    }`
+                                )
+                            );
+                        }
+                    }
+                    if (+splittedPosition[1] > 1) {
+                        setBlockedCells((state) =>
+                            state.add(
+                                `${splittedPosition[0]}-${
+                                    splittedPosition[1] - 1
+                                }`
+                            )
+                        );
+
+                        if (+splittedPosition[0] < 10) {
+                            setBlockedCells((state) =>
+                                state.add(
+                                    `${+splittedPosition[0] + 1}-${
+                                        splittedPosition[1] - 1
+                                    }`
+                                )
+                            );
+                        }
+                    }
+                    if (+splittedPosition[0] < 10) {
+                        setBlockedCells((state) =>
+                            state.add(
+                                `${
+                                    +splittedPosition[0] + 1
+                                }-${+splittedPosition[1]}`
+                            )
+                        );
+
+                        if (+splittedPosition[1] < 10) {
+                            setBlockedCells((state) =>
+                                state.add(
+                                    `${+splittedPosition[0] + 1}-${
+                                        +splittedPosition[1] + 1
+                                    }`
+                                )
+                            );
+                        }
+                    }
+                    if (+splittedPosition[1] < 10) {
+                        setBlockedCells((state) =>
+                            state.add(
+                                `${+splittedPosition[0]}-${
+                                    +splittedPosition[1] + 1
+                                }`
+                            )
+                        );
+                        if (splittedPosition[0] > 1) {
+                            setBlockedCells((state) =>
+                                state.add(
+                                    `${+splittedPosition[0] - 1}-${
+                                        +splittedPosition[1] + 1
+                                    }`
+                                )
+                            );
+                        }
+                    }
+                });
+            });
+    }, [positionedShips]);
+
     const handleRightClick = (e) => {
         if (numberOfDeck) {
             e.preventDefault();
@@ -79,8 +167,7 @@ const PlayerZoneField = ({
                     <PlayerZoneFieldBlock
                         key={index}
                         index={index}
-                        shipsPositions={shipsPositions}
-                        currentDirection={currentDirection}
+                        positionedShips={positionedShips}
                         highlightedBlocks={highlightedBlocks}
                         setHoveredBlockId={setHoveredBlockId}
                         setHighlightedBlocks={setHighlightedBlocks}
