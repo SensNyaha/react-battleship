@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import "./PlayerZone.scss";
 import PlayerZoneField from "./PlayerZoneField/PlayerZoneField";
 import PlayerZoneShipShop from "./PlayerZoneShipShop/PlayerZoneShipShop";
@@ -17,6 +17,14 @@ const PlayerZone = ({ host }) => {
             },
         ]);
         setCurrentNumberOfDeck(null);
+    };
+    const onClickingTheShip = (cellId) => {
+        const shipIndex = positionedShips.findIndex((ship) =>
+            ship.positions.some((item) => item === cellId)
+        );
+        setPositionedShips((prev) => {
+            return prev.filter((ship, index) => index !== shipIndex);
+        });
     };
 
     return (
@@ -39,6 +47,7 @@ const PlayerZone = ({ host }) => {
                 numberOfDeck={currentNumberOfDeck}
                 onPlacingTheShip={onPlacingTheShip}
                 shipsPositions={positionedShips}
+                onClickingTheShip={onClickingTheShip}
             />
             <PlayerZoneShipShop
                 setCurrentNumberOfDeck={setCurrentNumberOfDeck}

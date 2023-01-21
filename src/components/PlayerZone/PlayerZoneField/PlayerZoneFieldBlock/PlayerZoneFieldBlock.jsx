@@ -37,7 +37,7 @@ const PlayerZoneFieldBlock = ({
     highlightedBlocks,
     setHoveredBlockId,
     setHighlightedBlocks,
-    handlePlacingTheShip,
+    handleClickingTheCell,
 }) => {
     let content = marksObject[`${index + 1}-${Math.floor(index / 11) + 1}`];
 
@@ -100,6 +100,7 @@ const PlayerZoneFieldBlock = ({
                 break;
         }
     }
+
     return (
         <div
             className={`player-zone__block ${
@@ -118,7 +119,9 @@ const PlayerZoneFieldBlock = ({
                 setHighlightedBlocks([]);
                 setHoveredBlockId("");
             }}
-            onClick={handlePlacingTheShip}
+            onClick={() => {
+                handleClickingTheCell(id);
+            }}
         >
             {content}
         </div>

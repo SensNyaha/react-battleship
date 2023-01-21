@@ -6,6 +6,7 @@ const PlayerZoneField = ({
     numberOfDeck,
     onPlacingTheShip,
     shipsPositions,
+    onClickingTheShip,
 }) => {
     const [highlightedBlocks, setHighlightedBlocks] = useState([]);
     const [hoveredBlockID, setHoveredBlockId] = useState();
@@ -62,10 +63,12 @@ const PlayerZoneField = ({
             });
         }
     };
-    const handlePlacingTheShip = () => {
+    const handleClickingTheCell = (cellId) => {
         if (numberOfDeck) {
             onPlacingTheShip(highlightedBlocks, currentDirection);
             setHighlightedBlocks([]);
+        } else {
+            onClickingTheShip(cellId);
         }
     };
 
@@ -81,7 +84,7 @@ const PlayerZoneField = ({
                         highlightedBlocks={highlightedBlocks}
                         setHoveredBlockId={setHoveredBlockId}
                         setHighlightedBlocks={setHighlightedBlocks}
-                        handlePlacingTheShip={handlePlacingTheShip}
+                        handleClickingTheCell={handleClickingTheCell}
                     />
                 );
             })}

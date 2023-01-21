@@ -82,24 +82,25 @@ const ships = [
 //USE MEMO для POSITIONEDSHIPS
 
 const PlayerZoneShipShop = ({ setCurrentNumberOfDeck, positionedShips }) => {
-    const [plantedShips, setPlantedShips] = useState(ships);
+    const [shipsInShop, setShipsInShop] = useState(ships);
 
     useEffect(() => {
-        if (plantedShips) {
-            for (let i = 0; i < plantedShips.length; i++) {
+        //Логика затемнения
+        if (shipsInShop) {
+            for (let i = 0; i < shipsInShop.length; i++) {
                 const shipInProp = positionedShips?.find(
                     (item) =>
-                        +item.numberOfDeck === plantedShips[i].decks &&
-                        !plantedShips[i].positioned
+                        +item.numberOfDeck === shipsInShop[i].decks &&
+                        !shipsInShop[i].positioned
                 );
 
                 if (shipInProp) {
-                    setPlantedShips((prev) => {
+                    setShipsInShop((prev) => {
                         const copy = [...prev];
                         copy[i] = {
                             ...prev.find(
                                 (item) =>
-                                    +item.decks === plantedShips[i].decks &&
+                                    +item.decks === shipsInShop[i].decks &&
                                     !item.positioned
                             ),
                             positioned: true,
@@ -113,27 +114,39 @@ const PlayerZoneShipShop = ({ setCurrentNumberOfDeck, positionedShips }) => {
     }, [positionedShips]);
 
     useEffect(() => {
-        if (plantedShips) {
-            setPlantedShips((prevState) => {
-                return [...prevState].map((item) => {
-                    const isNotPresentedInNewPositionedShips =
-                        !positionedShips.some((ship) => {
-                            console.log(ship.numberOfDeck, item.decks);
-                            return ship.numberOfDeck == item.decks;
-                        });
-                    if (item.positioned && isNotPresentedInNewPositionedShips) {
-                        return { ...item, positioned: false };
+        //Логика разморозки корабля после удаления иконки с поля игры
+        if (shipsInShop) {
+            setShipsInShop((prevState) => {
+                const copyPositionedShips = [...positionedShips];
+
+                const placed = [];
+                const removed = [];
+
+                for (let i = 0; i < prevState.length; i++) {
+                    const indexInProps = copyPositionedShips.findIndex(
+                        (ship) => {
+                            return ship.numberOfDeck == prevState[i].decks;
+                        }
+                    );
+                    if (indexInProps === -1) {
+                        removed.push(prevState[i]);
+                    } else {
+                        placed.push(prevState[i]);
+                        copyPositionedShips.splice(indexInProps, 1);
                     }
-                    return item;
-                });
+                }
+                return [
+                    ...removed.map((item) => ({ ...item, positioned: false })),
+                    ...placed.map((item) => ({ ...item, positioned: true })),
+                ];
             });
         }
     }, [positionedShips]);
 
     return (
         <div className="player-zone__ship-shop">
-            {plantedShips &&
-                plantedShips.map((ship, index) => {
+            {shipsInShop &&
+                shipsInShop.map((ship, index) => {
                     return (
                         <div
                             key={ship.alt + "-" + index}
