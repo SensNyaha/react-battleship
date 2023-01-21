@@ -4,6 +4,8 @@ import deck3 from "../../3deck.png";
 import deck4 from "../../4deck.png";
 import sortFieldIndexes from "../../../../helpers/sortFieldIndexes";
 
+import hammer from "./hammer.gif";
+
 import "./PlayerZoneFieldBlock.scss";
 
 const marksObject = {
@@ -111,7 +113,9 @@ const PlayerZoneFieldBlock = ({
                 borderBottom: Math.floor(index / 11) + 1 === 11 ? "none" : "",
                 borderLeft: index % 11 === 0 ? "none" : "",
                 borderRight: (index + 1) % 11 === 0 ? "none" : "",
-                background: highlightedBlocks.includes(id) ? "black" : "",
+                background: highlightedBlocks.includes(id)
+                    ? `url(${hammer}) center center/cover`
+                    : "",
             }}
             id={id}
             onPointerEnter={() => setHoveredBlockId(id)}
