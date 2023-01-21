@@ -36,6 +36,7 @@ const PlayerZoneFieldBlock = ({
     index,
     positionedShips,
     highlightedBlocks,
+    blockedCells,
     setHoveredBlockId,
     setHighlightedBlocks,
     handleClickingTheCell,
@@ -114,6 +115,8 @@ const PlayerZoneFieldBlock = ({
                 borderRight: (index + 1) % 11 === 0 ? "none" : "",
                 background: highlightedBlocks.includes(id)
                     ? `url(${hammer}) center center/cover`
+                    : blockedCells && blockedCells.has(id)
+                    ? "rgba(0, 1, 0, 0.2)"
                     : "",
             }}
             id={id}

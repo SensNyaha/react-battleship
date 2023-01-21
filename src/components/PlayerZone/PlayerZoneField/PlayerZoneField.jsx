@@ -58,9 +58,8 @@ const PlayerZoneField = ({
         positionedShips &&
             positionedShips.forEach((ship) => {
                 ship.positions.forEach((position) => {
-                    const arrayOfPositions = [];
                     const splittedPosition = position.split("-");
-                    console.log(splittedPosition);
+                    setBlockedCells((state) => state.add(position));
                     if (splittedPosition[0] > 1) {
                         setBlockedCells((state) =>
                             state.add(
@@ -169,6 +168,7 @@ const PlayerZoneField = ({
                         index={index}
                         positionedShips={positionedShips}
                         highlightedBlocks={highlightedBlocks}
+                        blockedCells={blockedCells}
                         setHoveredBlockId={setHoveredBlockId}
                         setHighlightedBlocks={setHighlightedBlocks}
                         handleClickingTheCell={handleClickingTheCell}
