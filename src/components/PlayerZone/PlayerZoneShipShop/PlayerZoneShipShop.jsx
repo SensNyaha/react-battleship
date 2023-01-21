@@ -83,6 +83,8 @@ const ships = [
 
 const PlayerZoneShipShop = ({ setCurrentNumberOfDeck, positionedShips }) => {
     const [shipsInShop, setShipsInShop] = useState(ships);
+    const [currentlyChosenShipIndex, setCurrentlyChosenShipIndex] =
+        useState(null);
 
     useEffect(() => {
         //Логика затемнения
@@ -136,12 +138,22 @@ const PlayerZoneShipShop = ({ setCurrentNumberOfDeck, positionedShips }) => {
                     }
                 }
                 return [
-                    ...removed.map((item) => ({ ...item, positioned: false })),
                     ...placed.map((item) => ({ ...item, positioned: true })),
+                    ...removed.map((item) => ({ ...item, positioned: false })),
                 ].sort((a, b) => b.decks - a.decks);
             });
         }
     }, [positionedShips]);
+
+    useEffect(() => {
+        setCurrentlyChosenShipIndex(null);
+    }, [positionedShips]);
+    const handleClickOnShip = (e, index) => {
+        setCurrentNumberOfDeck(
+            e.target.closest(".player-zone__ship").getAttribute("decks")
+        );
+        setCurrentlyChosenShipIndex(index);
+    };
 
     return (
         <div className="player-zone__ship-shop">
@@ -151,17 +163,14 @@ const PlayerZoneShipShop = ({ setCurrentNumberOfDeck, positionedShips }) => {
                         <div
                             key={ship.alt + "-" + index}
                             className={`player-zone__ship ${ship.altClass} ${
-                                ship.positioned
+                                ship.positioned ||
+                                currentlyChosenShipIndex === index
                                     ? "player-zone__ship--placed"
                                     : ""
                             }`}
                             decks={ship.decks}
                             onClick={(e) => {
-                                setCurrentNumberOfDeck(
-                                    e.target
-                                        .closest(".player-zone__ship")
-                                        .getAttribute("decks")
-                                );
+                                handleClickOnShip(e, index);
                             }}
                         >
                             <img src={ship.img} alt={ship.alt} />
