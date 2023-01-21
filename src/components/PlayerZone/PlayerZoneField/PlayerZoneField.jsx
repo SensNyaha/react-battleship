@@ -53,6 +53,16 @@ const PlayerZoneField = ({
     }, [hoveredBlockID, currentDirection]);
 
     useEffect(() => {
+        if (
+            highlightedBlocks.some(
+                (block) => blockedCells && blockedCells.has(block)
+            )
+        ) {
+            setHighlightedBlocks([]);
+        }
+    }, [highlightedBlocks]);
+
+    useEffect(() => {
         setBlockedCells(new Set());
         //Логика определения заблокированных ячеек
         positionedShips &&
@@ -151,7 +161,7 @@ const PlayerZoneField = ({
         }
     };
     const handleClickingTheCell = (cellId) => {
-        if (numberOfDeck) {
+        if (numberOfDeck && highlightedBlocks.length) {
             onPlacingTheShip(highlightedBlocks, currentDirection);
             setHighlightedBlocks([]);
         } else {

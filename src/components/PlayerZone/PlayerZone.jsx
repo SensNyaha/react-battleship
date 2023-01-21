@@ -19,12 +19,14 @@ const PlayerZone = ({ host }) => {
         setCurrentNumberOfDeck(null);
     };
     const onClickingTheShip = (cellId) => {
-        const shipIndex = positionedShips.findIndex((ship) =>
-            ship.positions.some((item) => item === cellId)
-        );
-        setPositionedShips((prev) => {
-            return prev.filter((ship, index) => index !== shipIndex);
-        });
+        if (!currentNumberOfDeck) {
+            const shipIndex = positionedShips.findIndex((ship) =>
+                ship.positions.some((item) => item === cellId)
+            );
+            setPositionedShips((prev) => {
+                return prev.filter((ship, index) => index !== shipIndex);
+            });
+        }
     };
 
     return (
