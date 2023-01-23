@@ -37,16 +37,19 @@ const PlayerZoneFieldBlock = ({
     setHoveredBlockId,
     setHighlightedBlocks,
     handleClickingTheCell,
+    botField,
 }) => {
     let content = marksObject[`${index + 1}-${Math.floor(index / 11) + 1}`];
 
     const id = `${index % 11}-${Math.floor((index - 11) / 11) + 1}`;
 
-    const shipPositionInfo = positionedShips.find((pos) =>
-        pos.positions.includes(id)
-    );
-    if (shipPositionInfo?.positions.sort(sortFieldIndexes)[0] === id) {
-        content = placeShipsIntoReadyPositions(shipPositionInfo);
+    if (!botField) {
+        const shipPositionInfo = positionedShips.find((pos) =>
+            pos.positions.includes(id)
+        );
+        if (shipPositionInfo?.positions.sort(sortFieldIndexes)[0] === id) {
+            content = placeShipsIntoReadyPositions(shipPositionInfo);
+        }
     }
 
     return (
@@ -61,7 +64,7 @@ const PlayerZoneFieldBlock = ({
                 borderRight: (index + 1) % 11 === 0 ? "none" : "",
                 background: highlightedBlocks.includes(id)
                     ? `url(${hammer}) rgba(0, 1, 0, 0.05) center center/cover`
-                    : blockedCells && blockedCells.has(id)
+                    : blockedCells && blockedCells.has(id) && !botField
                     ? "rgba(0, 1, 0, 0.2)"
                     : "",
             }}

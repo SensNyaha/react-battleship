@@ -8,6 +8,7 @@ const PlayerZoneField = ({
     onPlacingTheShip,
     positionedShips,
     onClickingTheShip,
+    botField,
 }) => {
     const [highlightedBlocks, setHighlightedBlocks] = useState([]);
     const [blockedCells, setBlockedCells] = useState(new Set());
@@ -104,6 +105,7 @@ const PlayerZoneField = ({
                         setHoveredBlockId={setHoveredBlockId}
                         setHighlightedBlocks={setHighlightedBlocks}
                         handleClickingTheCell={handleClickingTheCell}
+                        botField={botField}
                     />
                 );
             })}

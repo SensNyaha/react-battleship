@@ -45,7 +45,7 @@ const PlayerZone = ({ host }) => {
                 host ? "player-zone--player" : "player-zone--bot"
             }`}
             style={{
-                // filter: host ? "" : "blur(10px)",
+                // filter: host ? "" : "blur(50px)",
                 pointerEvents: host ? "" : "none",
             }}
         >
@@ -72,12 +72,13 @@ const PlayerZone = ({ host }) => {
                 onPlacingTheShip={onPlacingTheShip}
                 positionedShips={positionedShips}
                 onClickingTheShip={onClickingTheShip}
+                botField={!host}
             />
             <PlayerZoneShipShop
                 setCurrentNumberOfDeck={setCurrentNumberOfDeck}
                 positionedShips={positionedShips}
             />
-            {positionedShips.length >= 10 ? (
+            {positionedShips.length >= 10 && host ? (
                 <button className="player-zone__start">Я готов начать!</button>
             ) : null}
         </div>
