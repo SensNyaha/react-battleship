@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Bot } from "../../helpers/Bot";
 import "./PlayerZone.scss";
 import PlayerZoneField from "./PlayerZoneField/PlayerZoneField";
 import PlayerZoneShipShop from "./PlayerZoneShipShop/PlayerZoneShipShop";
@@ -30,11 +31,21 @@ const PlayerZone = ({ host }) => {
         }
     };
 
+    useEffect(() => {
+        if (!host) {
+            const bot = new Bot(".player-zone--bot");
+            bot.createPositions();
+            setPositionedShips(bot.positionedShips);
+        }
+    }, []);
+
     return (
         <div
-            className={`player-zone ${host ? "player-zone--player" : ""}`}
+            className={`player-zone ${
+                host ? "player-zone--player" : "player-zone--bot"
+            }`}
             style={{
-                filter: host ? "" : "blur(10px)",
+                // filter: host ? "" : "blur(10px)",
                 pointerEvents: host ? "" : "none",
             }}
         >

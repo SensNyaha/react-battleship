@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import createBlockedCellArrayPositions from "../../../helpers/createBlockedCellArrayPositions";
 import "./PlayerZoneField.scss";
 import PlayerZoneFieldBlock from "./PlayerZoneFieldBlock/PlayerZoneFieldBlock";
 
@@ -64,88 +65,9 @@ const PlayerZoneField = ({
 
     useEffect(() => {
         setBlockedCells(new Set());
-        //Логика определения заблокированных ячеек
-        positionedShips &&
-            positionedShips.forEach((ship) => {
-                ship.positions.forEach((position) => {
-                    const splittedPosition = position.split("-");
-                    setBlockedCells((state) => state.add(position));
-                    if (splittedPosition[0] > 1) {
-                        setBlockedCells((state) =>
-                            state.add(
-                                `${splittedPosition[0] - 1}-${
-                                    splittedPosition[1]
-                                }`
-                            )
-                        );
-                        if (+splittedPosition[1] > 1) {
-                            setBlockedCells((state) =>
-                                state.add(
-                                    `${splittedPosition[0] - 1}-${
-                                        splittedPosition[1] - 1
-                                    }`
-                                )
-                            );
-                        }
-                    }
-                    if (+splittedPosition[1] > 1) {
-                        setBlockedCells((state) =>
-                            state.add(
-                                `${splittedPosition[0]}-${
-                                    splittedPosition[1] - 1
-                                }`
-                            )
-                        );
-
-                        if (+splittedPosition[0] < 10) {
-                            setBlockedCells((state) =>
-                                state.add(
-                                    `${+splittedPosition[0] + 1}-${
-                                        splittedPosition[1] - 1
-                                    }`
-                                )
-                            );
-                        }
-                    }
-                    if (+splittedPosition[0] < 10) {
-                        setBlockedCells((state) =>
-                            state.add(
-                                `${
-                                    +splittedPosition[0] + 1
-                                }-${+splittedPosition[1]}`
-                            )
-                        );
-
-                        if (+splittedPosition[1] < 10) {
-                            setBlockedCells((state) =>
-                                state.add(
-                                    `${+splittedPosition[0] + 1}-${
-                                        +splittedPosition[1] + 1
-                                    }`
-                                )
-                            );
-                        }
-                    }
-                    if (+splittedPosition[1] < 10) {
-                        setBlockedCells((state) =>
-                            state.add(
-                                `${+splittedPosition[0]}-${
-                                    +splittedPosition[1] + 1
-                                }`
-                            )
-                        );
-                        if (splittedPosition[0] > 1) {
-                            setBlockedCells((state) =>
-                                state.add(
-                                    `${+splittedPosition[0] - 1}-${
-                                        +splittedPosition[1] + 1
-                                    }`
-                                )
-                            );
-                        }
-                    }
-                });
-            });
+        createBlockedCellArrayPositions(positionedShips, (position) =>
+            setBlockedCells((state) => state.add(position))
+        );
     }, [positionedShips]);
 
     const handleRightClick = (e) => {

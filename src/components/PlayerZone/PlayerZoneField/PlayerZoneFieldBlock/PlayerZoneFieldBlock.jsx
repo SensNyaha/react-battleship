@@ -1,7 +1,4 @@
-import deck1 from "../../1deck.png";
-import deck2 from "../../2deck.png";
-import deck3 from "../../3deck.png";
-import deck4 from "../../4deck.png";
+import placeShipsIntoReadyPositions from "../../../../helpers/returnContentForPositionedCells";
 import sortFieldIndexes from "../../../../helpers/sortFieldIndexes";
 
 import hammer from "./hammer.gif";
@@ -49,58 +46,7 @@ const PlayerZoneFieldBlock = ({
         pos.positions.includes(id)
     );
     if (shipPositionInfo?.positions.sort(sortFieldIndexes)[0] === id) {
-        switch (shipPositionInfo?.numberOfDeck) {
-            case "4":
-                content = (
-                    <img
-                        className="ship__decks-4"
-                        src={deck4}
-                        alt=""
-                        style={{
-                            transform:
-                                shipPositionInfo?.orientation === "vertical"
-                                    ? "rotateZ(90deg) translateY(-100%)"
-                                    : "",
-                        }}
-                    />
-                );
-                break;
-            case "3":
-                content = (
-                    <img
-                        className="ship__decks-3"
-                        src={deck3}
-                        alt=""
-                        style={{
-                            transform:
-                                shipPositionInfo?.orientation === "vertical"
-                                    ? "rotateZ(90deg) translateY(-100%)"
-                                    : "",
-                        }}
-                    />
-                );
-                break;
-            case "2":
-                content = (
-                    <img
-                        className="ship__decks-2"
-                        src={deck2}
-                        alt=""
-                        style={{
-                            transform:
-                                shipPositionInfo?.orientation === "vertical"
-                                    ? "rotateZ(90deg) translateY(-100%)"
-                                    : "",
-                        }}
-                    />
-                );
-                break;
-            case "1":
-                content = <img className="ship__decks-1" src={deck1} alt="" />;
-                break;
-            default:
-                break;
-        }
+        content = placeShipsIntoReadyPositions(shipPositionInfo);
     }
 
     return (
