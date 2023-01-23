@@ -55,6 +55,9 @@ const PlayerZone = ({ host }) => {
                 setCurrentNumberOfDeck={setCurrentNumberOfDeck}
                 positionedShips={positionedShips}
             />
+            {positionedShips.length >= 10 ? (
+                <button className="player-zone__start">Я готов начать!</button>
+            ) : null}
         </div>
     );
 };

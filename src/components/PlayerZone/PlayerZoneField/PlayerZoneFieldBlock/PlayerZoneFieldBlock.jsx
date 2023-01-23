@@ -114,7 +114,7 @@ const PlayerZoneFieldBlock = ({
                 borderLeft: index % 11 === 0 ? "none" : "",
                 borderRight: (index + 1) % 11 === 0 ? "none" : "",
                 background: highlightedBlocks.includes(id)
-                    ? `url(${hammer}) center center/cover`
+                    ? `url(${hammer}) rgba(0, 1, 0, 0.05) center center/cover`
                     : blockedCells && blockedCells.has(id)
                     ? "rgba(0, 1, 0, 0.2)"
                     : "",
