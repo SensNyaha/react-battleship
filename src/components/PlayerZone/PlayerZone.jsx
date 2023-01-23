@@ -14,6 +14,7 @@ const PlayerZone = ({ host }) => {
                 numberOfDeck: currentNumberOfDeck,
                 positions: highlightedBlocks,
                 orientation: currentDirection,
+                destroyed: false,
             },
         ]);
         setCurrentNumberOfDeck(null);
@@ -39,10 +40,20 @@ const PlayerZone = ({ host }) => {
         >
             <div className="player-zone__scores">
                 <div className="player-zone__alive">
-                    Кораблей, выходящих на связь: {"2"}
+                    Кораблей, выходящих на связь:
+                    {positionedShips.reduce((sum, ship) => {
+                        if (ship.destroyed === false) {
+                            return sum + 1;
+                        }
+                    }, 0)}
                 </div>
                 <div className="player-zone__lost">
-                    Без вести потеряно кораблей: {"2"}
+                    Без вести потеряно кораблей:
+                    {positionedShips.reduce((sum, ship) => {
+                        if (ship.destroyed === true) {
+                            return sum + 1;
+                        }
+                    }, 0) || 0}
                 </div>
             </div>
             <PlayerZoneField

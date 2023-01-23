@@ -78,7 +78,7 @@ const PlayerZoneField = ({
                                 }`
                             )
                         );
-                        if (+splittedPosition[0] > 1) {
+                        if (+splittedPosition[1] > 1) {
                             setBlockedCells((state) =>
                                 state.add(
                                     `${splittedPosition[0] - 1}-${
