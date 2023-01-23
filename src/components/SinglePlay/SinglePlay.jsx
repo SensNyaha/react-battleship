@@ -5,7 +5,7 @@ const SinglePlay = () => {
     return (
         <div className="game__single">
             <GameTitle text={"Бой против бота"} />
-            <GameBoard />
+            <GameBoard mode="single" />
         </div>
     );
 };

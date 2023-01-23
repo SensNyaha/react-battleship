@@ -4,7 +4,7 @@ import "./PlayerZone.scss";
 import PlayerZoneField from "./PlayerZoneField/PlayerZoneField";
 import PlayerZoneShipShop from "./PlayerZoneShipShop/PlayerZoneShipShop";
 
-const PlayerZone = ({ host }) => {
+const PlayerZone = ({ host, handleAskGameStart, gameStarted }) => {
     const [currentNumberOfDeck, setCurrentNumberOfDeck] = useState();
     const [positionedShips, setPositionedShips] = useState([]);
 
@@ -73,13 +73,19 @@ const PlayerZone = ({ host }) => {
                 positionedShips={positionedShips}
                 onClickingTheShip={onClickingTheShip}
                 botField={!host}
+                gameStarted={gameStarted}
             />
             <PlayerZoneShipShop
                 setCurrentNumberOfDeck={setCurrentNumberOfDeck}
                 positionedShips={positionedShips}
             />
-            {positionedShips.length >= 10 && host ? (
-                <button className="player-zone__start">Я готов начать!</button>
+            {positionedShips.length >= 10 && host && !gameStarted ? (
+                <button
+                    className="player-zone__start"
+                    onClick={handleAskGameStart}
+                >
+                    Я готов начать!
+                </button>
             ) : null}
         </div>
     );

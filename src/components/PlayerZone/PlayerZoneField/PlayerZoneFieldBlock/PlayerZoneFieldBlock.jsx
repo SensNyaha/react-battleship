@@ -64,7 +64,8 @@ const PlayerZoneFieldBlock = ({
                 borderRight: (index + 1) % 11 === 0 ? "none" : "",
                 background: highlightedBlocks.includes(id)
                     ? `url(${hammer}) rgba(0, 1, 0, 0.05) center center/cover`
-                    : blockedCells && blockedCells.has(id) && !botField
+                    : (blockedCells && blockedCells.has(id) && !botField) ||
+                      (positionedShips.length >= 10 && !botField)
                     ? "rgba(0, 1, 0, 0.2)"
                     : "",
             }}

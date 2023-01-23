@@ -9,6 +9,7 @@ const PlayerZoneField = ({
     positionedShips,
     onClickingTheShip,
     botField,
+    gameStarted,
 }) => {
     const [highlightedBlocks, setHighlightedBlocks] = useState([]);
     const [blockedCells, setBlockedCells] = useState(new Set());
@@ -84,11 +85,13 @@ const PlayerZoneField = ({
         }
     };
     const handleClickingTheCell = (cellId) => {
-        if (numberOfDeck && highlightedBlocks.length) {
-            onPlacingTheShip(highlightedBlocks, currentDirection);
-            setHighlightedBlocks([]);
-        } else {
-            onClickingTheShip(cellId);
+        if (!gameStarted) {
+            if (numberOfDeck && highlightedBlocks.length) {
+                onPlacingTheShip(highlightedBlocks, currentDirection);
+                setHighlightedBlocks([]);
+            } else {
+                onClickingTheShip(cellId);
+            }
         }
     };
 
