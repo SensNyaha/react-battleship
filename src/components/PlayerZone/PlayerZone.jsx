@@ -1,12 +1,26 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Bot } from "../../helpers/Bot";
 import "./PlayerZone.scss";
 import PlayerZoneField from "./PlayerZoneField/PlayerZoneField";
 import PlayerZoneShipShop from "./PlayerZoneShipShop/PlayerZoneShipShop";
 
-const PlayerZone = ({ host, handleAskGameStart, gameStarted }) => {
+const PlayerZone = ({
+    zoneIndex,
+    host,
+    handleAskGameStart,
+    gameStarted,
+    currentPlayer,
+    setCurrentPlayer,
+    currentMove,
+    changeMoveIndex,
+    playersPositionedShips,
+    setPlayersPositionedShips,
+}) => {
     const [currentNumberOfDeck, setCurrentNumberOfDeck] = useState();
     const [positionedShips, setPositionedShips] = useState([]);
+    const [shotCells, setShotCells] = useState([]);
+    // const [onShotManipulations, setOnShotManipulations] = useState(false);
+    const [botLogics, setBotLogics] = useState(null);
 
     const onPlacingTheShip = (highlightedBlocks, currentDirection) => {
         setPositionedShips((prev) => [
@@ -30,14 +44,54 @@ const PlayerZone = ({ host, handleAskGameStart, gameStarted }) => {
             });
         }
     };
+    const handleShotEnemyField = (cellId) => {
+        const alreadyShot = shotCells.includes(cellId);
+        if (!alreadyShot) {
+            setShotCells((prev) => [...prev, cellId]);
+            if (
+                !positionedShips.some((ship) =>
+                    ship.positions.some((pos) => pos === cellId)
+                )
+            ) {
+                setCurrentPlayer(currentPlayer === 0 ? 1 : 0);
+            }
+            changeMoveIndex((prev) => prev + 1);
+        }
+    };
 
     useEffect(() => {
         if (!host) {
-            const bot = new Bot(".player-zone--bot");
-            bot.createPositions();
-            setPositionedShips(bot.positionedShips);
+            setBotLogics(new Bot(".player-zone--bot"));
         }
     }, []);
+
+    useEffect(() => {
+        if (botLogics) {
+            botLogics.createPositions();
+            setPositionedShips(botLogics.positionedShips);
+        }
+    }, [botLogics]);
+
+    useEffect(() => {
+        if (gameStarted && botLogics) {
+            botLogics.initPlayersField(playersPositionedShips[0]);
+        }
+    }, [gameStarted]);
+
+    useEffect(() => {
+        if (positionedShips.length) {
+            setPlayersPositionedShips((prev) => {
+                return [...prev].map((item, index) =>
+                    index === zoneIndex ? positionedShips : item
+                );
+            });
+        }
+    }, [positionedShips]);
+
+    //Здесь должен активироваться функционал работы с полем, когда сменяется currentMove
+    // useEffect(() => {
+    //     setOnShotManipulations(+currentPlayer === +zoneIndex ? false : true);
+    // }, [currentMove]);
 
     return (
         <div
@@ -46,7 +100,10 @@ const PlayerZone = ({ host, handleAskGameStart, gameStarted }) => {
             }`}
             style={{
                 // filter: host ? "" : "blur(50px)",
-                pointerEvents: host ? "" : "none",
+                pointerEvents:
+                    host || (gameStarted && +currentPlayer !== +zoneIndex)
+                        ? ""
+                        : "none",
             }}
         >
             <div className="player-zone__scores">
@@ -74,6 +131,8 @@ const PlayerZone = ({ host, handleAskGameStart, gameStarted }) => {
                 onClickingTheShip={onClickingTheShip}
                 botField={!host}
                 gameStarted={gameStarted}
+                currentPlayer={+currentPlayer === +zoneIndex}
+                handleShotEnemyField={handleShotEnemyField}
             />
             <PlayerZoneShipShop
                 setCurrentNumberOfDeck={setCurrentNumberOfDeck}

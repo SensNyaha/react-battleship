@@ -29,7 +29,12 @@ const SpinArrow = ({ gameStarted, setCurrentPlayer, currentPlayer }) => {
 
     return (
         <>
-            <div className="spin-arrow">
+            <div
+                className="spin-arrow"
+                style={{
+                    zIndex: `${show ? "10000" : "-5"}`,
+                }}
+            >
                 <svg
                     fill="#000000"
                     width="800px"
@@ -38,7 +43,6 @@ const SpinArrow = ({ gameStarted, setCurrentPlayer, currentPlayer }) => {
                     id="down-arrow"
                     style={{
                         opacity: `${show ? `1` : "0"}`,
-                        zIndex: `${show ? "10000" : "-5"}`,
                         transition: "all 3s .5s",
                         transform: `${show ? `rotateZ(${fi})` : ""}`,
                     }}

@@ -10,6 +10,8 @@ const PlayerZoneField = ({
     onClickingTheShip,
     botField,
     gameStarted,
+    currentPlayer,
+    handleShotEnemyField,
 }) => {
     const [highlightedBlocks, setHighlightedBlocks] = useState([]);
     const [blockedCells, setBlockedCells] = useState(new Set());
@@ -92,6 +94,10 @@ const PlayerZoneField = ({
             } else {
                 onClickingTheShip(cellId);
             }
+        } else {
+            if (!currentPlayer) {
+                handleShotEnemyField(cellId);
+            }
         }
     };
 
@@ -109,6 +115,8 @@ const PlayerZoneField = ({
                         setHighlightedBlocks={setHighlightedBlocks}
                         handleClickingTheCell={handleClickingTheCell}
                         botField={botField}
+                        currentPlayer={currentPlayer}
+                        gameStarted={gameStarted}
                     />
                 );
             })}

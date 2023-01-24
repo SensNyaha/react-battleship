@@ -18,6 +18,12 @@
 
         background-color: transparent !important
     }
+    &.player-zone__block--hover {
+        &:hover {
+            cursor:crosshair;
+            background: url(https://img.icons8.com/wired/512/define-location.png) center center/contain !important
+        }
+    }
 }
 .ship__decks {
     &-1 {

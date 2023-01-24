@@ -6,9 +6,13 @@ import SpinArrow from "../SpinArrow/SpinArrow";
 import "./GameBoard.scss";
 
 const GameBoard = ({ mode }) => {
+    const [playersPositionedShips, setPlayersPositionedShips] = useState([
+        [],
+        [],
+    ]);
     const [gameStartAsks, setGameStartAsks] = useState(0);
     const [gameStarted, setGameStarted] = useState(false);
-    const [currentPlayer, setCurrentPlayer] = useState("");
+    const [currentPlayer, setCurrentPlayer] = useState(null);
     const [moveIndex, setMoveIndex] = useState(0);
 
     const handleAskGameStart = () => {
@@ -24,6 +28,12 @@ const GameBoard = ({ mode }) => {
         }
     }, [gameStartAsks, mode]);
 
+    useEffect(() => {
+        if (gameStarted) {
+            setMoveIndex(1);
+        }
+    }, [gameStarted]);
+
     return (
         <div className="game__board">
             <PlayerZone
@@ -31,12 +41,24 @@ const GameBoard = ({ mode }) => {
                 host
                 handleAskGameStart={handleAskGameStart}
                 gameStarted={gameStarted}
+                currentPlayer={currentPlayer}
+                setCurrentPlayer={setCurrentPlayer}
+                currentMove={moveIndex}
+                changeMoveIndex={setMoveIndex}
+                playersPositionedShips={playersPositionedShips}
+                setPlayersPositionedShips={setPlayersPositionedShips}
             />
             <PlayerZone
                 zoneIndex={1}
                 host={mode !== "single" ? true : false}
                 handleAskGameStart={handleAskGameStart}
                 gameStarted={gameStarted}
+                currentPlayer={currentPlayer}
+                setCurrentPlayer={setCurrentPlayer}
+                currentMove={moveIndex}
+                changeMoveIndex={setMoveIndex}
+                playersPositionedShips={playersPositionedShips}
+                setPlayersPositionedShips={setPlayersPositionedShips}
             />
             <SpinArrow
                 gameStarted={gameStarted}

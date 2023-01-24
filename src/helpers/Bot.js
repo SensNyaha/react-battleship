@@ -16,6 +16,7 @@ export class Bot {
             { numberOfDeck: 1, positions: [], destroyed: false },
         ];
         this.blockedCells = new Set();
+        this.shotCells = []; //{id:id, hit: true/false}
     }
 
     createPositions() {
@@ -65,5 +66,24 @@ export class Bot {
                 i--;
             }
         }
+    }
+    randomShot() {
+        let x = Math.ceil(Math.random() * 10);
+        let y = Math.ceil(Math.random() * 10);
+        let id = `${x}-${y}`;
+
+        while (this.shotCells.includes(id)) {
+            x = Math.ceil(Math.random() * 10);
+            y = Math.ceil(Math.random() * 10);
+            id = `${x}-${y}`;
+        }
+        
+        const hit = this.playersPositionedShips.some(position => position.positions.some(posId => posId === id));
+        this.shotCells = [...this.shotCells, {id, hit}];
+
+        return {id, hit}
+    }
+    initPlayersField(playersPositionedShips) {
+        this.playersPositionedShips = playersPositionedShips;
     }
 }
