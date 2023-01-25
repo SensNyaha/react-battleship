@@ -16,7 +16,7 @@ export class Bot {
             { numberOfDeck: 1, positions: [], destroyed: false },
         ];
         this.blockedCells = new Set();
-        this.shotCells = []; //{id:id, hit: true/false}
+        this.shotCells = {}; //{id: true/false}
     }
 
     createPositions() {
@@ -72,7 +72,7 @@ export class Bot {
         let y = Math.ceil(Math.random() * 10);
         let id = `${x}-${y}`;
 
-        while (this.shotCells.includes(id)) {
+        while (this.shotCells[id] !== undefined) {
             x = Math.ceil(Math.random() * 10);
             y = Math.ceil(Math.random() * 10);
             id = `${x}-${y}`;

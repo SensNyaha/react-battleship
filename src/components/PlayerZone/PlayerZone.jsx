@@ -100,7 +100,6 @@ const PlayerZone = ({
 
     useEffect(() => {
         if (gameStarted) {
-            console.log(shotCells);
             let wasDestroyed = false;
             const newState = positionedShips.map((ship) => {
                 const isDead = ship.positions.every((position) =>
