@@ -13,13 +13,14 @@ const PlayerZone = ({
     currentPlayer,
     setCurrentPlayer,
     changeMoveIndex,
-    playersPositionedShips,
     setPlayersPositionedShips,
+    moveIndex,
+    bot,
+    setBot,
 }) => {
     const [currentNumberOfDeck, setCurrentNumberOfDeck] = useState();
     const [positionedShips, setPositionedShips] = useState([]);
     const [shotCells, setShotCells] = useState(new Set());
-    const [botLogics, setBotLogics] = useState(null);
 
     const onPlacingTheShip = (highlightedBlocks, currentDirection) => {
         setPositionedShips((prev) => [
@@ -71,22 +72,34 @@ const PlayerZone = ({
 
     useEffect(() => {
         if (!host) {
-            setBotLogics(new Bot(".player-zone--bot"));
+            setBot(new Bot(".player-zone--bot"));
         }
     }, []);
 
     useEffect(() => {
-        if (botLogics) {
-            botLogics.createPositions();
-            setPositionedShips(botLogics.positionedShips);
+        if (bot && !host) {
+            bot.createPositions();
+            setPositionedShips(bot.positionedShips);
         }
-    }, [botLogics]);
+    }, [bot]);
 
     useEffect(() => {
-        if (gameStarted && botLogics) {
-            botLogics.initPlayersField(playersPositionedShips[0]);
+        if (gameStarted && bot && host) {
+            bot.initPlayersField(positionedShips);
         }
     }, [gameStarted]);
+
+    useEffect(() => {
+        if (
+            gameStarted &&
+            bot &&
+            host &&
+            currentPlayer === 1 &&
+            zoneIndex === 0
+        ) {
+            handleShotEnemyField(bot.doTurn());
+        }
+    }, [gameStarted, bot, host, currentPlayer, zoneIndex, moveIndex]);
 
     useEffect(() => {
         if (positionedShips.length) {

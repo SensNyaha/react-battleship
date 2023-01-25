@@ -16,6 +16,7 @@ const GameBoard = ({ mode }) => {
     const [currentPlayer, setCurrentPlayer] = useState(null);
     const [moveIndex, setMoveIndex] = useState(0);
     const [endOfGame, setEndOfGame] = useState(false);
+    const [bot, setBot] = useState(null);
 
     const handleAskGameStart = () => {
         setGameStartAsks((prev) => prev + 1);
@@ -55,6 +56,8 @@ const GameBoard = ({ mode }) => {
                     changeMoveIndex={setMoveIndex}
                     playersPositionedShips={playersPositionedShips}
                     setPlayersPositionedShips={setPlayersPositionedShips}
+                    bot={bot}
+                    moveIndex={moveIndex}
                 />
                 <PlayerZone
                     zoneIndex={1}
@@ -66,6 +69,9 @@ const GameBoard = ({ mode }) => {
                     changeMoveIndex={setMoveIndex}
                     playersPositionedShips={playersPositionedShips}
                     setPlayersPositionedShips={setPlayersPositionedShips}
+                    bot={bot}
+                    setBot={setBot}
+                    moveIndex={moveIndex}
                 />
                 <SpinArrow
                     gameStarted={gameStarted}

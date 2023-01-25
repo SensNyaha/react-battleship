@@ -1,4 +1,6 @@
 import createBlockedCellArrayPositions from "./createBlockedCellArrayPositions";
+import acceptPositionReturnBlocked from './acceptPositionReturnBlocked';
+import predictCells from "./predictCells";
 
 export class Bot {
     constructor(fieldSelector) {
@@ -15,8 +17,12 @@ export class Bot {
             { numberOfDeck: 1, positions: [], destroyed: false },
             { numberOfDeck: 1, positions: [], destroyed: false },
         ];
+        this.playersPositionedShips = [];
         this.blockedCells = new Set();
         this.shotCells = {}; //{id: true/false}
+        this.toRandom = true;
+        this.recommendedCellsToShot = [];
+        this.hitShipPositions = [];
     }
 
     createPositions() {
@@ -67,6 +73,60 @@ export class Bot {
             }
         }
     }
+    initPlayersField(playersPositionedShips) {
+        this.playersPositionedShips = playersPositionedShips;
+    }
+    doTurn() {
+        if (this.toRandom) {
+            const infoShot = this.randomShot();
+            console.log(infoShot.hit)
+
+            if (infoShot.hit) {
+                this.toRandom = false;
+
+                this.hitShipPositions.push(infoShot.id);
+
+                if (this.checkDestroy()) { 
+
+                    acceptPositionReturnBlocked(infoShot.id).forEach(pos => this.blockedCells.add(pos));
+                    this.toRandom = true;
+
+                    this.recommendedCellsToShot = [];
+                    this.hitShipPositions = [];
+                }
+                else {
+                    this.recommendedCellsToShot = predictCells(this.hitShipPositions);
+                }
+            }
+console.log(this)
+            return infoShot.id
+        }
+        else {
+            const infoShot = this.notRandomShot(this.recommendedCellsToShot[0]);
+            console.log(infoShot.hit)
+
+            if (infoShot.hit) {
+                this.hitShipPositions.push(infoShot.id);
+
+                if (this.checkDestroy()) { 
+
+                    acceptPositionReturnBlocked(infoShot.id).forEach(pos => this.blockedCells.add(pos));
+                    this.toRandom = true;
+
+                    this.recommendedCellsToShot = [];
+                    this.hitShipPositions = [];
+                }
+                else {
+                    this.recommendedCellsToShot = predictCells(this.hitShipPositions);
+                }
+            }
+            else {
+                this.recommendedCellsToShot.splice(0, 1);
+            }
+            console.log(this)
+            return infoShot.id
+        }
+    }
     randomShot() {
         let x = Math.ceil(Math.random() * 10);
         let y = Math.ceil(Math.random() * 10);
@@ -79,11 +139,21 @@ export class Bot {
         }
         
         const hit = this.playersPositionedShips.some(position => position.positions.some(posId => posId === id));
-        this.shotCells = [...this.shotCells, {id, hit}];
+        this.shotCells = {...this.shotCells, [id]: hit};
 
         return {id, hit}
     }
-    initPlayersField(playersPositionedShips) {
-        this.playersPositionedShips = playersPositionedShips;
+    notRandomShot(id) {
+        const hit = this.playersPositionedShips.some(position => position.positions.some(posId => posId === id));
+        this.shotCells = {...this.shotCells, [id]: hit};
+
+        return {id, hit}
     }
+
+    checkDestroy() {
+        const killedShip = this.playersPositionedShips.find(ship => ship.positions.every(id => this.hitShipPositions.includes(id)));
+
+        return killedShip
+    }
+
 }
