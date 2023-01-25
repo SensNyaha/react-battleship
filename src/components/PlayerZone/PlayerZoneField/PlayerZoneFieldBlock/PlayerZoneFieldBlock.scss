@@ -1,4 +1,5 @@
 .player-zone__block {
+    position: relative;
 
     border: 1px solid rgba(1, 5, 133, 0.458);
 
@@ -21,7 +22,33 @@
     &.player-zone__block--hover {
         &:hover {
             cursor:crosshair;
-            background: url(https://img.icons8.com/wired/512/define-location.png) center center/contain !important
+            background: url(https://img.icons8.com/ios/100/torpedo.png) 20% / 70% !important
+        }
+    }
+    &.player-zone__block--explosion {
+        &:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            background-image: url(https://img.icons8.com/doodle/96/flash-bang--v1.png);
+            background-size: 100% 100%;
+        }
+    }
+    &.player-zone__block--miss {
+        &:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            background-image: url(https://img.icons8.com/color/96/foam-bubbles.png);
+            background-size: 100% 100%;
         }
     }
 }

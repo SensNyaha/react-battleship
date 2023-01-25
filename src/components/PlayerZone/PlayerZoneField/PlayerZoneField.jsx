@@ -12,6 +12,7 @@ const PlayerZoneField = ({
     gameStarted,
     currentPlayer,
     handleShotEnemyField,
+    shotCells,
 }) => {
     const [highlightedBlocks, setHighlightedBlocks] = useState([]);
     const [blockedCells, setBlockedCells] = useState(new Set());
@@ -117,6 +118,7 @@ const PlayerZoneField = ({
                         botField={botField}
                         currentPlayer={currentPlayer}
                         gameStarted={gameStarted}
+                        shotCells={shotCells}
                     />
                 );
             })}

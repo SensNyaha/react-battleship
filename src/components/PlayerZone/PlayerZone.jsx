@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import acceptPositionReturnBlocked from "../../helpers/acceptPositionReturnBlocked";
 import { Bot } from "../../helpers/Bot";
 import "./PlayerZone.scss";
 import PlayerZoneField from "./PlayerZoneField/PlayerZoneField";
@@ -11,15 +12,13 @@ const PlayerZone = ({
     gameStarted,
     currentPlayer,
     setCurrentPlayer,
-    currentMove,
     changeMoveIndex,
     playersPositionedShips,
     setPlayersPositionedShips,
 }) => {
     const [currentNumberOfDeck, setCurrentNumberOfDeck] = useState();
     const [positionedShips, setPositionedShips] = useState([]);
-    const [shotCells, setShotCells] = useState([]);
-    // const [onShotManipulations, setOnShotManipulations] = useState(false);
+    const [shotCells, setShotCells] = useState(new Set());
     const [botLogics, setBotLogics] = useState(null);
 
     const onPlacingTheShip = (highlightedBlocks, currentDirection) => {
@@ -45,9 +44,9 @@ const PlayerZone = ({
         }
     };
     const handleShotEnemyField = (cellId) => {
-        const alreadyShot = shotCells.includes(cellId);
+        const alreadyShot = shotCells.has(cellId);
         if (!alreadyShot) {
-            setShotCells((prev) => [...prev, cellId]);
+            setShotCells((prev) => prev.add(cellId));
             if (
                 !positionedShips.some((ship) =>
                     ship.positions.some((pos) => pos === cellId)
@@ -57,6 +56,17 @@ const PlayerZone = ({
             }
             changeMoveIndex((prev) => prev + 1);
         }
+    };
+    const addShotCellsAfterShipDestroying = (positionedShips) => {
+        positionedShips.forEach((ship) => {
+            if (ship.destroyed) {
+                ship.positions.forEach((id) =>
+                    acceptPositionReturnBlocked(id).forEach((id) => {
+                        setShotCells((prev) => prev.add(id));
+                    })
+                );
+            }
+        });
     };
 
     useEffect(() => {
@@ -88,10 +98,32 @@ const PlayerZone = ({
         }
     }, [positionedShips]);
 
-    //Здесь должен активироваться функционал работы с полем, когда сменяется currentMove
-    // useEffect(() => {
-    //     setOnShotManipulations(+currentPlayer === +zoneIndex ? false : true);
-    // }, [currentMove]);
+    useEffect(() => {
+        if (gameStarted) {
+            console.log(shotCells);
+            let wasDestroyed = false;
+            const newState = positionedShips.map((ship) => {
+                const isDead = ship.positions.every((position) =>
+                    shotCells.has(position)
+                );
+                if (isDead) {
+                    wasDestroyed = true;
+                    return { ...ship, destroyed: true };
+                } else {
+                    return ship;
+                }
+            });
+            if (wasDestroyed) {
+                setPositionedShips(newState);
+            }
+        }
+    }, [shotCells.size]);
+
+    useEffect(() => {
+        if (positionedShips) {
+            addShotCellsAfterShipDestroying(positionedShips);
+        }
+    }, [positionedShips]);
 
     return (
         <div
@@ -113,6 +145,7 @@ const PlayerZone = ({
                         if (ship.destroyed === false) {
                             return sum + 1;
                         }
+                        return sum;
                     }, 0)}
                 </div>
                 <div className="player-zone__lost">
@@ -121,6 +154,7 @@ const PlayerZone = ({
                         if (ship.destroyed === true) {
                             return sum + 1;
                         }
+                        return sum;
                     }, 0) || 0}
                 </div>
             </div>
@@ -133,11 +167,14 @@ const PlayerZone = ({
                 gameStarted={gameStarted}
                 currentPlayer={+currentPlayer === +zoneIndex}
                 handleShotEnemyField={handleShotEnemyField}
+                shotCells={shotCells}
             />
-            <PlayerZoneShipShop
-                setCurrentNumberOfDeck={setCurrentNumberOfDeck}
-                positionedShips={positionedShips}
-            />
+            {!gameStarted ? (
+                <PlayerZoneShipShop
+                    setCurrentNumberOfDeck={setCurrentNumberOfDeck}
+                    positionedShips={positionedShips}
+                />
+            ) : null}
             {positionedShips.length >= 10 && host && !gameStarted ? (
                 <button
                     className="player-zone__start"

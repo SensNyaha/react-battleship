@@ -60,7 +60,7 @@ const SpinArrow = ({ gameStarted, setCurrentPlayer, currentPlayer }) => {
                     ></path>
                 </svg>
             </div>
-            {infoBlockShow ? (
+            {infoBlockShow && show ? (
                 <div className="info-block">
                     Первым начинает игрок{" "}
                     {currentPlayer === 0 ? "слева" : "справа"}

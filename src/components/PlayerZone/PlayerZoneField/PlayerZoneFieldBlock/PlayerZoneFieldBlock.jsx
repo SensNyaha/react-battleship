@@ -40,6 +40,7 @@ const PlayerZoneFieldBlock = ({
     botField,
     currentPlayer,
     gameStarted,
+    shotCells,
 }) => {
     let content = marksObject[`${index + 1}-${Math.floor(index / 11) + 1}`];
 
@@ -59,7 +60,17 @@ const PlayerZoneFieldBlock = ({
             className={`player-zone__block ${
                 typeof content === "string" ? "player-zone__block--blocked" : ""
             } ${
-                !currentPlayer && gameStarted ? "player-zone__block--hover" : ""
+                !currentPlayer && gameStarted && !shotCells.has(id)
+                    ? "player-zone__block--hover"
+                    : ""
+            } ${
+                shotCells.has(id)
+                    ? positionedShips.some((ship) =>
+                          ship.positions.some((pos) => pos === id)
+                      )
+                        ? "player-zone__block--explosion"
+                        : "player-zone__block--miss"
+                    : ""
             }`}
             style={{
                 borderTop: Math.floor(index / 11) + 1 === 1 ? "none" : "",

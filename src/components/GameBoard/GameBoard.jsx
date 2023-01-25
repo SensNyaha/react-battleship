@@ -43,7 +43,6 @@ const GameBoard = ({ mode }) => {
                 gameStarted={gameStarted}
                 currentPlayer={currentPlayer}
                 setCurrentPlayer={setCurrentPlayer}
-                currentMove={moveIndex}
                 changeMoveIndex={setMoveIndex}
                 playersPositionedShips={playersPositionedShips}
                 setPlayersPositionedShips={setPlayersPositionedShips}
@@ -55,7 +54,6 @@ const GameBoard = ({ mode }) => {
                 gameStarted={gameStarted}
                 currentPlayer={currentPlayer}
                 setCurrentPlayer={setCurrentPlayer}
-                currentMove={moveIndex}
                 changeMoveIndex={setMoveIndex}
                 playersPositionedShips={playersPositionedShips}
                 setPlayersPositionedShips={setPlayersPositionedShips}
