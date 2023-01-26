@@ -196,13 +196,17 @@ const instructionsSlides = [
     ],
 ];
 
-const InstructionsModal = () => {
+const InstructionsModal = ({ setShowInst }) => {
     const [curSlide, setCurSlide] = useState(1);
 
     useEffect(() => {
         const instr = document.querySelector(".instructions__inner");
         if (instr) {
             instr.scrollTo(0, 0);
+        }
+
+        if (curSlide > instructionsSlides.length) {
+            setShowInst(false);
         }
     }, [curSlide]);
 
@@ -215,19 +219,27 @@ const InstructionsModal = () => {
                     )}
                 </div>
                 <div className="instructions__controls">
+                    {curSlide === 1 ? null : (
+                        <button
+                            className="instructions__button instructions__button--prev"
+                            onClick={() => setCurSlide((prev) => prev - 1)}
+                        >
+                            Назад
+                        </button>
+                    )}
                     <button
-                        className="instructions__button"
-                        onClick={() => setCurSlide((prev) => prev - 1)}
-                    >
-                        Назад
-                    </button>
-                    <button
-                        className="instructions__button"
+                        className="instructions__button instructions__button--next"
                         onClick={() => setCurSlide((prev) => prev + 1)}
                     >
                         Дальше
                     </button>
                 </div>
+                <button
+                    onClick={() => setShowInst(false)}
+                    className="instructions__close"
+                >
+                    X
+                </button>
             </div>
         </div>
     );
