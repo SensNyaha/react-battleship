@@ -22,7 +22,6 @@ const PlayerZone = ({
     const [currentNumberOfDeck, setCurrentNumberOfDeck] = useState();
     const [positionedShips, setPositionedShips] = useState([]);
     const [shotCells, setShotCells] = useState(new Set());
-    const [isTimeout, setIsTimeout] = useState(false);
 
     const onPlacingTheShip = (highlightedBlocks, currentDirection) => {
         setPositionedShips((prev) => [
@@ -95,20 +94,11 @@ const PlayerZone = ({
             host &&
             currentPlayer === 1 &&
             zoneIndex === 0 &&
-            !gameEnded &&
-            !isTimeout
+            !gameEnded
         ) {
             setTimeout(() => handleShotEnemyField(bot.doTurn()), 1500);
         }
-    }, [
-        gameStarted,
-        bot,
-        host,
-        currentPlayer,
-        zoneIndex,
-        moveIndex,
-        isTimeout,
-    ]);
+    }, [gameStarted, bot, host, currentPlayer, zoneIndex, moveIndex]);
     useEffect(() => {
         if (positionedShips.length) {
             setPlayersPositionedShips((prev) => {
