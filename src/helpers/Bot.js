@@ -1,5 +1,4 @@
 import createBlockedCellArrayPositions from "./createBlockedCellArrayPositions";
-import acceptPositionReturnBlocked from "./acceptPositionReturnBlocked";
 import predictCells from "./predictCells";
 
 export class Bot {

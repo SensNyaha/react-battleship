@@ -28,6 +28,7 @@
         }
     }
     &.player-zone__block--explosion {
+        animation: glowRed 1.5s ease-in-out 1;
         &:after {
             content: '';
             position: absolute;
@@ -42,6 +43,7 @@
         }
     }
     &.player-zone__block--miss {
+        animation: glowGreen 1.5s ease-in-out 1;
         &:after {
             content: '';
             position: absolute;
@@ -72,5 +74,56 @@
     &-4 {
         transform-origin: left top;
         width: 400%;
+    }
+}
+
+@keyframes glowGreen {
+    0% {
+        border-color:rgba(1, 5, 133, 0.458);
+        box-shadow: 0px 0px 0px green;
+    }
+    20% {
+        border-color:rgba(12, 191, 6, 0.458);
+        border-radius: 2px;
+        box-shadow: 0px 0px 10px rgba(12, 191, 6, 0.458);
+    }
+    50% {
+        border-color:rgb(67, 171, 63);
+        border-radius: 3px;
+        box-shadow: 0px 0px 40px rgb(12, 191, 6);
+    }
+    80% {
+        border-color:rgba(12, 191, 6, 0.458);
+        border-radius: 2px;
+        box-shadow: 0px 0px 10px rgba(12, 191, 6, 0.458);
+    }
+    100% {
+        border-color:rgba(1, 5, 133, 0.458);
+        box-shadow: 0px 0px;
+    }
+}
+@keyframes glowRed {
+    0% {
+        border-color:rgba(1, 5, 133, 0.458);
+        box-shadow: 0px 0px 0px red;
+    }
+    20% {
+        border-color:rgba(196, 96, 29, 0.458);
+        border-radius: 2px;
+        box-shadow: 0px 0px 10px rgba(191, 6, 6, 0.458);
+    }
+    50% {
+        border-color:rgb(255, 77, 0);
+        border-radius: 3px;
+        box-shadow: 0px 0px 40px rgb(255, 0, 0);
+    }
+    80% {
+        border-color:rgba(196, 96, 29, 0.458);
+        border-radius: 2px;
+        box-shadow: 0px 0px 10px rgba(191, 6, 6, 0.458);
+    }
+    100% {
+        border-color:rgba(1, 5, 133, 0.458);
+        box-shadow: 0px 0px;
     }
 }
