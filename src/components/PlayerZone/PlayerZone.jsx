@@ -10,6 +10,7 @@ const PlayerZone = ({
     host,
     handleAskGameStart,
     gameStarted,
+    gameEnded,
     currentPlayer,
     setCurrentPlayer,
     changeMoveIndex,
@@ -95,7 +96,8 @@ const PlayerZone = ({
             bot &&
             host &&
             currentPlayer === 1 &&
-            zoneIndex === 0
+            zoneIndex === 0 &&
+            !gameEnded
         ) {
             handleShotEnemyField(bot.doTurn());
         }
@@ -146,7 +148,9 @@ const PlayerZone = ({
                 // filter: host ? "" : "blur(50px)",
                 pointerEvents:
                     host || (gameStarted && +currentPlayer !== +zoneIndex)
-                        ? ""
+                        ? host && gameStarted
+                            ? "none"
+                            : ""
                         : "none",
             }}
         >

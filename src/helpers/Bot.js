@@ -1,5 +1,5 @@
 import createBlockedCellArrayPositions from "./createBlockedCellArrayPositions";
-import acceptPositionReturnBlocked from './acceptPositionReturnBlocked';
+import acceptPositionReturnBlocked from "./acceptPositionReturnBlocked";
 import predictCells from "./predictCells";
 
 export class Bot {
@@ -28,7 +28,7 @@ export class Bot {
     createPositions() {
         for (let i = 0; i < this.positionedShips.length; i++) {
             const currentShip = this.positionedShips[i] || {};
-            const orientation = Math.random() > 0.5 ? 'horizontal' : 'vertical';
+            const orientation = Math.random() > 0.5 ? "horizontal" : "vertical";
             let newPositionsIsValid = true;
 
             currentShip.orientation = orientation;
@@ -36,39 +36,40 @@ export class Bot {
             let x = 0;
             let y = 0;
 
-            const xIncrease = orientation === 'horizontal' ? currentShip.numberOfDeck : 0;
-            const yIncrease = orientation === 'vertical' ? currentShip.numberOfDeck : 0;
+            const xIncrease =
+                orientation === "horizontal" ? currentShip.numberOfDeck : 0;
+            const yIncrease =
+                orientation === "vertical" ? currentShip.numberOfDeck : 0;
 
             do {
                 x = Math.ceil(Math.random() * 10);
-            }
-            while ((x + xIncrease >= 10))
+            } while (x + xIncrease >= 10);
 
             do {
                 y = Math.ceil(Math.random() * 10);
-            }
-            while ((y + yIncrease >= 10))
-
+            } while (y + yIncrease >= 10);
 
             currentShip.positions = [];
             for (let j = 0; j < currentShip.numberOfDeck; j++) {
-                if (orientation === 'horizontal') {
-                    currentShip.positions.push(`${x+j}-${y}`)
+                if (orientation === "horizontal") {
+                    currentShip.positions.push(`${x + j}-${y}`);
                 }
-                if (orientation === 'vertical') {
-                    currentShip.positions.push(`${x}-${y+j}`)
+                if (orientation === "vertical") {
+                    currentShip.positions.push(`${x}-${y + j}`);
                 }
             }
-            
+
             for (let position of currentShip.positions) {
                 if (this.blockedCells.has(position)) {
                     newPositionsIsValid = false;
                 }
             }
             if (newPositionsIsValid) {
-                createBlockedCellArrayPositions(this.positionedShips, (position) => this.blockedCells.add(position))
-            }
-            else {
+                createBlockedCellArrayPositions(
+                    this.positionedShips,
+                    (position) => this.blockedCells.add(position)
+                );
+            } else {
                 i--;
             }
         }
@@ -79,52 +80,60 @@ export class Bot {
     doTurn() {
         if (this.toRandom) {
             const infoShot = this.randomShot();
-            console.log(infoShot.hit)
 
             if (infoShot.hit) {
                 this.toRandom = false;
 
                 this.hitShipPositions.push(infoShot.id);
 
-                if (this.checkDestroy()) { 
+                const killedShip = this.checkDestroy();
 
-                    acceptPositionReturnBlocked(infoShot.id).forEach(pos => this.blockedCells.add(pos));
+                if (killedShip) {
+                    createBlockedCellArrayPositions([killedShip], (id) => {
+                        if (!this.shotCells[id]) {
+                            this.shotCells[id] = false;
+                        }
+                    });
+
                     this.toRandom = true;
 
                     this.recommendedCellsToShot = [];
                     this.hitShipPositions = [];
-                }
-                else {
-                    this.recommendedCellsToShot = predictCells(this.hitShipPositions);
+                } else {
+                    this.recommendedCellsToShot = predictCells(
+                        this.hitShipPositions
+                    ).filter((item) => this.shotCells[item] === undefined);
                 }
             }
-console.log(this)
-            return infoShot.id
-        }
-        else {
+            return infoShot.id;
+        } else {
             const infoShot = this.notRandomShot(this.recommendedCellsToShot[0]);
-            console.log(infoShot.hit)
 
             if (infoShot.hit) {
                 this.hitShipPositions.push(infoShot.id);
 
-                if (this.checkDestroy()) { 
+                const killedShip = this.checkDestroy();
 
-                    acceptPositionReturnBlocked(infoShot.id).forEach(pos => this.blockedCells.add(pos));
+                if (killedShip) {
+                    createBlockedCellArrayPositions([killedShip], (id) => {
+                        if (!this.shotCells[id]) {
+                            this.shotCells[id] = false;
+                        }
+                    });
+
                     this.toRandom = true;
 
                     this.recommendedCellsToShot = [];
                     this.hitShipPositions = [];
+                } else {
+                    this.recommendedCellsToShot = predictCells(
+                        this.hitShipPositions
+                    ).filter((item) => this.shotCells[item] === undefined);
                 }
-                else {
-                    this.recommendedCellsToShot = predictCells(this.hitShipPositions);
-                }
-            }
-            else {
+            } else {
                 this.recommendedCellsToShot.splice(0, 1);
             }
-            console.log(this)
-            return infoShot.id
+            return infoShot.id;
         }
     }
     randomShot() {
@@ -137,23 +146,28 @@ console.log(this)
             y = Math.ceil(Math.random() * 10);
             id = `${x}-${y}`;
         }
-        
-        const hit = this.playersPositionedShips.some(position => position.positions.some(posId => posId === id));
-        this.shotCells = {...this.shotCells, [id]: hit};
 
-        return {id, hit}
+        const hit = this.playersPositionedShips.some((position) =>
+            position.positions.some((posId) => posId === id)
+        );
+        this.shotCells = { ...this.shotCells, [id]: hit };
+
+        return { id, hit };
     }
     notRandomShot(id) {
-        const hit = this.playersPositionedShips.some(position => position.positions.some(posId => posId === id));
-        this.shotCells = {...this.shotCells, [id]: hit};
+        const hit = this.playersPositionedShips.some((position) =>
+            position.positions.some((posId) => posId === id)
+        );
+        this.shotCells = { ...this.shotCells, [id]: hit };
 
-        return {id, hit}
+        return { id, hit };
     }
 
     checkDestroy() {
-        const killedShip = this.playersPositionedShips.find(ship => ship.positions.every(id => this.hitShipPositions.includes(id)));
+        const killedShip = this.playersPositionedShips.find((ship) =>
+            ship.positions.every((id) => this.hitShipPositions.includes(id))
+        );
 
-        return killedShip
+        return killedShip;
     }
-
 }

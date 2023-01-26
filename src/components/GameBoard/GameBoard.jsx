@@ -51,6 +51,7 @@ const GameBoard = ({ mode }) => {
                     host
                     handleAskGameStart={handleAskGameStart}
                     gameStarted={gameStarted}
+                    gameEnded={endOfGame}
                     currentPlayer={currentPlayer}
                     setCurrentPlayer={setCurrentPlayer}
                     changeMoveIndex={setMoveIndex}
@@ -64,6 +65,7 @@ const GameBoard = ({ mode }) => {
                     host={mode !== "single" ? true : false}
                     handleAskGameStart={handleAskGameStart}
                     gameStarted={gameStarted}
+                    gameEnded={endOfGame}
                     currentPlayer={currentPlayer}
                     setCurrentPlayer={setCurrentPlayer}
                     changeMoveIndex={setMoveIndex}

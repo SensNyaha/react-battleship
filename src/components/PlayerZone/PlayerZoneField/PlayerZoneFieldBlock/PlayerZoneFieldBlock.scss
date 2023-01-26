@@ -8,6 +8,8 @@
 
     img {
         position: relative;
+        z-index: 2;
+        cursor: grabbing;
     }
 
     &.player-zone__block--blocked {
@@ -36,6 +38,7 @@
             object-fit: cover;
             background-image: url(https://img.icons8.com/doodle/96/flash-bang--v1.png);
             background-size: 100% 100%;
+            z-index: 3;
         }
     }
     &.player-zone__block--miss {
@@ -53,6 +56,7 @@
     }
 }
 .ship__decks {
+
     &-1 {
         transform-origin: left top;
         width: 100%;
