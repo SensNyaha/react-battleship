@@ -10,8 +10,12 @@ const SpinArrow = ({ gameStarted, setCurrentPlayer, currentPlayer }) => {
         setFi(Math.random() * 720 + 720 + "deg" || 0);
     }, []);
     useEffect(() => {
-        parseFloat(fi) % 360 <= 180 ? setCurrentPlayer(0) : setCurrentPlayer(1);
-    }, [fi]);
+        if (gameStarted) {
+            parseFloat(fi) % 360 <= 180
+                ? setCurrentPlayer(0)
+                : setCurrentPlayer(1);
+        }
+    }, [fi, gameStarted]);
     useEffect(() => {
         setShow(gameStarted);
     }, [gameStarted]);
@@ -63,7 +67,7 @@ const SpinArrow = ({ gameStarted, setCurrentPlayer, currentPlayer }) => {
             {infoBlockShow && show ? (
                 <div className="info-block">
                     Первым начинает игрок{" "}
-                    {currentPlayer === 0 ? "слева" : "справа"}
+                    {parseFloat(fi) % 360 <= 180 ? "слева" : "справа"}
                 </div>
             ) : null}
         </>

@@ -23,6 +23,9 @@ const GameBoard = ({ mode }) => {
     };
 
     useEffect(() => {
+        console.log(currentPlayer);
+    }, [currentPlayer]);
+    useEffect(() => {
         if (
             (mode === "single" && gameStartAsks >= 1) ||
             (mode === "twin" && gameStartAsks >= 2)
